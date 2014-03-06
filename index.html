@@ -3,16 +3,128 @@
 <head>
 	<link href="http://fonts.googleapis.com/css?family=Raleway:200,100,400" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
 	<script type="text/javascript" src="script.js"></script>
+	<script src="js/jquery.knob.js"></script>
+	<script>
+            $(function($) {
+
+                $(".knob").knob({
+                    change : function (value) {
+                        //console.log("change : " + value);
+                    },
+                    release : function (value) {
+                        //console.log(this.$.attr('value'));
+                        console.log("release : " + value);
+                    },
+                    cancel : function () {
+                        console.log("cancel : ", this);
+                    },
+                    /*format : function (value) {
+                        return value + '%';
+                    },*/
+                    draw : function () {
+
+                        // "tron" case
+                        if(this.$.data('skin') == 'tron') {
+
+                            this.cursorExt = 0.3;
+
+                            var a = this.arc(this.cv)  // Arc
+                                , pa                   // Previous arc
+                                , r = 1;
+
+                            this.g.lineWidth = this.lineWidth;
+
+                            if (this.o.displayPrevious) {
+                                pa = this.arc(this.v);
+                                this.g.beginPath();
+                                this.g.strokeStyle = this.pColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, pa.s, pa.e, pa.d);
+                                this.g.stroke();
+                            }
+
+                            this.g.beginPath();
+                            this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, a.s, a.e, a.d);
+                            this.g.stroke();
+
+                            this.g.lineWidth = 2;
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.o.fgColor;
+                            this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                            this.g.stroke();
+
+                            return false;
+                        }
+                    }
+                });
+
+                // Example of infinite knob, iPod click wheel
+                var v, up=0,down=0,i=0
+                    ,$idir = $("div.idir")
+                    ,$ival = $("div.ival")
+                    ,incr = function() { i++; $idir.show().html("+").fadeOut(); $ival.html(i); }
+                    ,decr = function() { i--; $idir.show().html("-").fadeOut(); $ival.html(i); };
+                $("input.infinite").knob(
+                                    {
+                                    min : 0
+                                    , max : 20
+                                    , stopper : false
+                                    , change : function () {
+                                                    if(v > this.cv){
+                                                        if(up){
+                                                            decr();
+                                                            up=0;
+                                                        }else{up=1;down=0;}
+                                                    } else {
+                                                        if(v < this.cv){
+                                                            if(down){
+                                                                incr();
+                                                                down=0;
+                                                            }else{down=1;up=0;}
+                                                        }
+                                                    }
+                                                    v = this.cv;
+                                                }
+                                    });
+            });
+        </script>
 	<title>Test</title>
 </head>
 <body>
-	<h1>Tim Bodyka Heng</h1>
+<!-- 	<h1>Tim Bodyka Heng</h1>
 	<h2>I am a
   <span
      class="txt-rotate"
      data-period="2000"
      data-rotate='[ "UX/UI Designer.", "Developer.", "Keen Observer." ]'></span>
+	</h2> -->
+
+	<h1>Cloud Services</h1>
+	<h2>Providing
+  <span
+     class="txt-rotate"
+     data-period="2000"
+     data-rotate='[ "Virtual Data Centre.", "Hosted Exchange.", "Stand Alone VM." ]'></span>
 	</h2>
+	<hr>
+	<br>
+
+	    <div>
+	    	<div class="graph">
+	    		<input class="knob" data-fgColor="#c0392b" data-thickness=".3" readonly value="2" data-max="6">
+	    		<p>VMs Down</p>
+	    	</div>
+	    	<div class="graph">
+	    		<input class="knob" data-fgColor="#27ae60" data-thickness=".3" readonly value="4" data-max="6">
+	    		<p>VMs On</p>
+	    	</div>
+            <div class="graph">
+            	<input class="knob" data-fgColor="#7f8c8d" data-thickness=".3" readonly value="0" data-max="6">
+            	<p>VMs Off</p>
+            </div>
+        </div>
 </body>
 </html>

@@ -15,3 +15,12 @@ h2 {
   color: #888;
   font-size: 2em;
 }
+
+div.graph {
+	display: inline-block;
+	padding-right: 100px;
+}
+
+p {
+	text-align: center;
+}
